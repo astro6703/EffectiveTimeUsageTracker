@@ -12,10 +12,10 @@ namespace EffectiveTimeUsageTracker.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager   = userManager ?? throw new ArgumentNullException($"{nameof(userManager)} was null");
             _signInManager = signInManager ?? throw new ArgumentNullException($"{nameof(signInManager)} was null");

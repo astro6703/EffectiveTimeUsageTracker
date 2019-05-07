@@ -26,7 +26,7 @@ namespace EffectiveTimeUsageTracker
         {
             services.AddDbContext<UsersIdentityDbContext>(options 
                 => options.UseSqlServer(Configuration.GetConnectionString("LocalDB")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UsersIdentityDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<UsersIdentityDbContext>();
             services.AddMvc();
         }
 
