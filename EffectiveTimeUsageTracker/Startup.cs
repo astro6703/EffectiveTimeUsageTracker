@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using EffectiveTimeUsageTracker.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace EffectiveTimeUsageTracker
 {
@@ -21,6 +24,9 @@ namespace EffectiveTimeUsageTracker
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<UsersIdentityDbContext>(options 
+                => options.UseSqlServer(Configuration.GetConnectionString("LocalDB")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UsersIdentityDbContext>();
             services.AddMvc();
         }
 
