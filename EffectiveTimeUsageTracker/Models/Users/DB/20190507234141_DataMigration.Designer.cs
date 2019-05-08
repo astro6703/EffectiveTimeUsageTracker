@@ -4,14 +4,16 @@ using EffectiveTimeUsageTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EffectiveTimeUsageTracker.Models.Users.DB
 {
     [DbContext(typeof(UsersIdentityDbContext))]
-    partial class UsersIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190507234141_DataMigration")]
+    partial class DataMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
