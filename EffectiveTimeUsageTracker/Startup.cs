@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using EffectiveTimeUsageTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using EffectiveTimeUsageTracker.Models.Objectives;
+using MongoDB.Driver;
 
 namespace EffectiveTimeUsageTracker
 {
@@ -24,9 +26,11 @@ namespace EffectiveTimeUsageTracker
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IMongoClient>(serveceProvider => new MongoClient(Configuration.GetConnectionString("MongoDB")));
+            services.AddTransient<IUserObjectivesRepository, UserObjectivesRepository>();
             services.AddDbContext<UsersIdentityDbContext>(options 
                 => options.UseSqlServer(Configuration.GetConnectionString("LocalDB")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UsersIdentityDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<UsersIdentityDbContext>();
             services.AddMvc();
         }
 
@@ -36,6 +40,7 @@ namespace EffectiveTimeUsageTracker
             app.UseStatusCodePages();
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
         }
     }
