@@ -1,0 +1,24 @@
+﻿@model  UserCreateModel;
+
+<div>
+    <h1>User creation</h1>
+    <div asp-validation-summary="All"></div>
+    <form action="@Url.Action("Create", "Account")" , method="post">
+        <div>
+            <label for="Name">Name:</label>
+            <input name="Name" type="text" />
+        </div>
+        <div>
+            <label for="Email">Email:</label>
+            <input name="Email" type="email" />
+        </div>
+        <div>
+            <label for="Password">Password:</label>
+            <input name="Password" type="password" />
+        </div>
+        <div>
+            <label for="submit">Submit:</label>
+            <input name="submit" type="submit" />
+        </div>
+    </form>
+</div>
