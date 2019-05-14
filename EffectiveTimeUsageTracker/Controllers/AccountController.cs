@@ -44,9 +44,9 @@ namespace EffectiveTimeUsageTracker.Controllers
                 if (user != null)
                 {
                     await _signInManager.SignOutAsync();
-                    var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, true, false);
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, loginModel.Password, true, false);
 
-                    if (result.Succeeded)
+                    if (signInResult.Succeeded)
                         return RedirectToAction("Index", "Home");
                 }
 
@@ -70,20 +70,17 @@ namespace EffectiveTimeUsageTracker.Controllers
                     Email = createModel.Email
                 };
 
-                var result = await _userManager.CreateAsync(user, createModel.Password);
+                var identityResult = await _userManager.CreateAsync(user, createModel.Password);
 
-                if (result.Succeeded)
+                if (identityResult.Succeeded)
                 {
                     await _signInManager.PasswordSignInAsync(user, createModel.Password, true, false);
 
                     return RedirectToAction("Index", "Home");
                 }
 
-                else
-                {
-                    foreach (var error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
-                }
+                foreach (var error in identityResult.Errors)
+                    ModelState.AddModelError("", error.Description);
             }
 
             return View(createModel);
