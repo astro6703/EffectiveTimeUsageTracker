@@ -1,0 +1,26 @@
+﻿@using EffectiveTimeUsageTracker.Models.Objectives;
+@model  UserObjectives
+
+<div>
+    @($"Welcome, {User.Identity.Name}, you're authorized now!")
+    <div>
+        <a href="@Url.Action("SignOut", "Account")">SignOut</a>
+    </div>
+    <div>
+        <div>
+            <h2>Your objectives</h2>
+            @if (Model.Objectives.Count() != 0)
+            {
+                foreach (var objective in Model.Objectives)
+                {
+                <div>Name: @objective.Name</div>
+                <div>Time left today: @objective.TimeLeftToday</div>
+                <div><a href="@Url.Action("StartWatch", "Timer", new { objective.Name })">Start timer</a></div>
+                <div><a href="@Url.Action("StopWatch", "Timer", new { objective.Name })">Stop timer:</a></div>
+                }
+            }
+            else { <div>You have no objections</div> } 
+        </div>
+        <a href="@Url.Action("CreateObjective", "Timer")">Create objective</a>
+    </div>
+</div>
