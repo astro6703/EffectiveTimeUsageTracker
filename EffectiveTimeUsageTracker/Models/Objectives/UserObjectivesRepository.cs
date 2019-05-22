@@ -70,7 +70,7 @@ namespace EffectiveTimeUsageTracker.Models.Objectives
                 throw new InvalidOperationException("UserObjective instance to update is missing");
 
             newObjectives.Id = oldObjective.Id;
-            var filter = Builders<BsonDocument>.Filter.Eq("username", newObjectives.Username).ToBsonDocument();
+            var filter = new BsonDocument("_id", newObjectives.Id);
             await collection.ReplaceOneAsync(filter, newObjectives);
         }
     }
