@@ -1,9 +1,11 @@
 ﻿using EffectiveTimeUsageTracker.Models;
+using EffectiveTimeUsageTracker.Models.Objectives;
 using EffectiveTimeUsageTracker.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EffectiveTimeUsageTracker.Controllers
@@ -12,11 +14,13 @@ namespace EffectiveTimeUsageTracker.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUserObjectivesRepository _objectivesRepository;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserObjectivesRepository objectivesRepository)
         {
             _userManager = userManager ?? throw new ArgumentNullException($"{nameof(userManager)} was null");
             _signInManager = signInManager ?? throw new ArgumentNullException($"{nameof(signInManager)} was null");
+            _objectivesRepository = objectivesRepository ?? throw new ArgumentNullException($"{nameof(signInManager)} was null");
         }
 
         [AllowAnonymous]
@@ -47,7 +51,7 @@ namespace EffectiveTimeUsageTracker.Controllers
                     var signInResult = await _signInManager.PasswordSignInAsync(user, loginModel.Password, true, false);
 
                     if (signInResult.Succeeded)
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Timer");
                 }
 
                 ModelState.AddModelError(nameof(loginModel.Email), "Invalid email or password");
@@ -74,9 +78,16 @@ namespace EffectiveTimeUsageTracker.Controllers
 
                 if (identityResult.Succeeded)
                 {
+                    var objectives = new UserObjectives()
+                    {
+                        Username = createModel.Name,
+                        Objectives = new List<Objective>()
+                    };
+
+                    await _objectivesRepository.SaveUserObjectivesAsync(objectives);
                     await _signInManager.PasswordSignInAsync(user, createModel.Password, true, false);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Timer");
                 }
 
                 foreach (var error in identityResult.Errors)
@@ -91,7 +102,7 @@ namespace EffectiveTimeUsageTracker.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Timer");
         }
     }
 }
