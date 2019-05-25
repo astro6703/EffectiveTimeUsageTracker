@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EffectiveTimeUsageTracker.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EffectiveTimeUsageTracker.Controllers
 {
@@ -15,6 +16,9 @@ namespace EffectiveTimeUsageTracker.Controllers
         private readonly IUserObjectivesRepository _userObjectivesRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly StopwatchRepository _stopwatchRepository;
+
+        private string UserID;
+        private ObjectiveStopwatch UserStopwatch;
 
         public TimerController(
             IUserObjectivesRepository repository, 
@@ -26,10 +30,16 @@ namespace EffectiveTimeUsageTracker.Controllers
             _stopwatchRepository = stopwatchRepository ?? throw new ArgumentNullException($"{nameof(stopwatchRepository)}");                
         }
 
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            UserID = _userManager.GetUserId(User);
+            UserStopwatch = _stopwatchRepository.GetUserStopwatch(UserID);
+        }
+
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(User.Identity.Name);
+            var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(_userManager.GetUserId(User));
             
             return View(objectives);
         }
@@ -37,26 +47,26 @@ namespace EffectiveTimeUsageTracker.Controllers
         [Authorize]
         public async Task<IActionResult> StartWatch(string name)
         {
-            var objectiveStopwatch = _stopwatchRepository.GetUserStopwatch(User.Identity.Name);
-            objectiveStopwatch.Stop();
-            var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(User.Identity.Name);
+            UserStopwatch.Stop();
+
+            var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(_userManager.GetUserId(User));
 
             if (!objectives.Objectives.Where(x => x.Name == name).Any())
                 throw new InvalidOperationException("No objective with such name exists");
 
-            var currentObjectiveName = objectiveStopwatch.ObjectiveName;
+            var currentObjectiveName = UserStopwatch.ObjectiveName;
 
             if (currentObjectiveName != null)
             {
                 var currentObjective = objectives.Objectives.Where(x => x.Name == currentObjectiveName).FirstOrDefault();
 
-                currentObjective.Spend(objectiveStopwatch.Elapsed);
+                currentObjective.Spend(UserStopwatch.Elapsed);
                 objectives.Objectives = objectives.Objectives.UpdateObjective(currentObjective).ToArray();
                 await _userObjectivesRepository.UpdateUserObjectivesAsync(objectives);
             }
 
-            objectiveStopwatch.SetObjective(name);
-            objectiveStopwatch.Start();
+            UserStopwatch.SetObjective(name);
+            UserStopwatch.Start();
 
             return RedirectToAction("Index", "Timer");
         }
@@ -64,21 +74,21 @@ namespace EffectiveTimeUsageTracker.Controllers
         [Authorize]
         public async Task<IActionResult> StopWatch(string name)
         {
-            var objectiveStopwatch = _stopwatchRepository.GetUserStopwatch(User.Identity.Name);
-            objectiveStopwatch.Stop();
-            var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(User.Identity.Name);
+            UserStopwatch.Stop();
+
+            var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(_userManager.GetUserId(User));
 
             if (!objectives.Objectives.Where(x => x.Name == name).Any())
                 return BadRequest("No objective with such name exists");
 
-            var currentObjectiveName = objectiveStopwatch.ObjectiveName;
+            var currentObjectiveName = UserStopwatch.ObjectiveName;
 
             if (currentObjectiveName == null)
                 return BadRequest("Timer is not set up");
 
             var currentObjective = objectives.Objectives.Where(x => x.Name == currentObjectiveName).FirstOrDefault();
 
-            currentObjective.Spend(objectiveStopwatch.Elapsed);
+            currentObjective.Spend(UserStopwatch.Elapsed);
             objectives.Objectives = objectives.Objectives.UpdateObjective(currentObjective).ToArray();
             await _userObjectivesRepository.UpdateUserObjectivesAsync(objectives);
 
@@ -93,11 +103,11 @@ namespace EffectiveTimeUsageTracker.Controllers
         [Authorize]
         public async Task<IActionResult> CreateObjective(Objective objective)
         {
-            if (objective == null) throw new ArgumentNullException("Objective instance was null");
+            if (objective == null) throw new ArgumentNullException($"{nameof(objective)} instance was null");
             
             if (ModelState.IsValid)
             {
-                var currentUserObjectives = await _userObjectivesRepository.GetUserObjectivesAsync(User.Identity.Name);
+                var currentUserObjectives = await _userObjectivesRepository.GetUserObjectivesAsync(_userManager.GetUserId(User));
 
                 if (currentUserObjectives == null)
                     ModelState.AddModelError("", "Cannot find userObjectives for this user");
@@ -119,14 +129,16 @@ namespace EffectiveTimeUsageTracker.Controllers
 
         public async Task<IActionResult> RemoveObjective(string name)
         {
-            if (name == null) throw new ArgumentNullException("Objective name was null");
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Objective name was empty or whitespace");
+            if (name == null) throw new ArgumentNullException($"{nameof(name)} was null");
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException($"{nameof(name)} was empty or whitespace");
 
-            var userObjectives = await _userObjectivesRepository.GetUserObjectivesAsync(User.Identity.Name);
+            var userObjectives = await _userObjectivesRepository.GetUserObjectivesAsync(_userManager.GetUserId(User));
             var objective = userObjectives.Objectives.Where(x => x.Name == name).FirstOrDefault();
 
             userObjectives.Objectives = userObjectives.Objectives.RemoveObjective(objective);
             await _userObjectivesRepository.UpdateUserObjectivesAsync(userObjectives);
+
+            UserStopwatch.ResetObjective();
 
             return RedirectToAction("Index", "Timer");
         }

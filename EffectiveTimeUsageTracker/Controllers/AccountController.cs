@@ -81,6 +81,7 @@ namespace EffectiveTimeUsageTracker.Controllers
                     var objectives = new UserObjectives()
                     {
                         Username = createModel.Name,
+                        UserId = await _userManager.GetUserIdAsync(user),
                         Objectives = new List<Objective>()
                     };
 

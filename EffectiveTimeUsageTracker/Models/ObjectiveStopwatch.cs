@@ -27,5 +27,10 @@ namespace EffectiveTimeUsageTracker.Models
 
             _stopwatch.Reset();
         }
+
+        public void ResetObjective()
+        {
+            ObjectiveName = null;
+        }
     }
 }

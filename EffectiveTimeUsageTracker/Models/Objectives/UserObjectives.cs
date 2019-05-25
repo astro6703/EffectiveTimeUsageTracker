@@ -10,10 +10,10 @@ namespace EffectiveTimeUsageTracker.Models.Objectives
         public BsonObjectId Id { get; set; }
 
         [BsonRequired]
-        [BsonElement("username")]
         public string Username { get; set; }
 
-        [BsonElement("objectives")]
+        public string UserId { get; set; }
+
         public IEnumerable<Objective> Objectives { get; set; }
     }
 }

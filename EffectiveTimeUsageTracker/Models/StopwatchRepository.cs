@@ -12,15 +12,16 @@ namespace EffectiveTimeUsageTracker.Models
             _stopwatchesMap = new Dictionary<string, ObjectiveStopwatch>();
         }
 
-        public ObjectiveStopwatch GetUserStopwatch(string username)
+        public ObjectiveStopwatch GetUserStopwatch(string userId)
         {
-            if (username == null) throw new ArgumentNullException("Username was null");
+            if (userId == null) throw new ArgumentNullException($"{nameof(userId)} was null");
+            if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException($"{nameof(userId)} was empty or whitespace");
 
-            if (_stopwatchesMap.TryGetValue(username, out var userStopwatch))
+            if (_stopwatchesMap.TryGetValue(userId, out var userStopwatch))
                 return userStopwatch;
 
             var stopwatch = new ObjectiveStopwatch();
-            _stopwatchesMap.Add(username, stopwatch);
+            _stopwatchesMap.Add(userId, stopwatch);
 
             return stopwatch;
         }
