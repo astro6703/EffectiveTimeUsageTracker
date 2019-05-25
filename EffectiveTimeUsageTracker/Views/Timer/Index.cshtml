@@ -14,9 +14,11 @@
                 foreach (var objective in Model.Objectives)
                 {
                 <div>Name: @objective.Name</div>
-                <div>Time left today: @objective.TimeLeftToday</div>
+                <div>Projected for today: @objective.ProjectedForToday</div>
+                <div>Time spent today: @objective.TimeSpentToday</div>
                 <div><a href="@Url.Action("StartWatch", "Timer", new { objective.Name })">Start timer</a></div>
                 <div><a href="@Url.Action("StopWatch", "Timer", new { objective.Name })">Stop timer:</a></div>
+                <div><a href="@Url.Action("RemoveObjective", "Timer", new { objective.Name })">Remove objective</a></div>
                 }
             }
             else { <div>You have no objections</div> } 

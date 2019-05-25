@@ -7,59 +7,44 @@ namespace EffectiveTimeUsageTracker.Models.Objectives
     public class Objective
     {
         [Required]
-        [BsonElement("name")]
         public string Name { get; set; }
 
         [Required]
-        [BsonElement("timegoal")]
         public int WeeklyTimeGoal { get; set; }
 
         [Required]
-        [BsonElement("totalweeks")]
         public int TotalWeeks { get; set; }
 
-        [BsonElement("timespent")]
-        public TimeSpan TimeSpent { get; set; }
-
-        [BsonElement("timespenttoday")]
-        public TimeSpan TimeSpentToday { get; set; }
-
-        [BsonElement("todaydate")]
-        public DateTime LastDate { get; set; }
-
-        [BsonElement("startdate")]
+        [Required]
         public DateTime StartDate { get; set; }
 
-        [BsonIgnore]
-        public int WeeksLeft
-            => (int)Math.Floor((DateTime.Now - StartDate).TotalDays) / 7;
+        public TimeSpan TimeSpent { get; set; }
 
-        public TimeSpan TimeLeftToday
+        public TimeSpan TimeSpentToday { get; set; }
+
+        public DateTime LastDate { get; set; }
+
+        public TimeSpan ProjectedForToday
         {
             get
             {
-                return new TimeSpan(hours: (int)Math.Floor(TotalTimeLeft().TotalHours / DaysLeft()),
-                                    minutes: 0,
-                                    seconds: 0) - TimeSpentToday;
+                var projectedTimeLeftFromTodaysNight = new TimeSpan(WeeklyTimeGoal * TotalWeeks, 0, 0) - TimeSpent + TimeSpentToday;
+                var daysLeft = Math.Floor((StartDate.AddDays(TotalWeeks * 7) - StartDate).TotalDays);
 
-                TimeSpan TotalTimeLeft() => new TimeSpan(hours: WeeklyTimeGoal * WeeksLeft(), minutes: 0, seconds: 0) - TimeSpent;
-
-                double DaysLeft() => (StartDate.AddHours(TotalWeeks * WeeklyTimeGoal) - DateTime.Now).TotalDays;
-
-                int WeeksLeft() => (int)((StartDate.AddHours(TotalWeeks * WeeklyTimeGoal) - DateTime.Now).TotalDays / 7);
+                return projectedTimeLeftFromTodaysNight / daysLeft;
             }
         }
 
         public void Spend(TimeSpan time)
         {
-            if (LastDate == DateTime.Now.Date)
+            if (LastDate == DateTime.Now.Date.ToUniversalTime())
             {
                 TimeSpentToday += time;
                 TimeSpent += time;
             }
             else
             {
-                LastDate = DateTime.Now.Date;
+                LastDate = DateTime.Now.Date.ToUniversalTime();
                 TimeSpentToday = time;
                 TimeSpent += time;
             }
