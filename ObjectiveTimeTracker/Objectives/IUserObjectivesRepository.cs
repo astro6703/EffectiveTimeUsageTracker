@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EffectiveTimeUsageTracker.Models.Objectives
+namespace ObjectiveTimeTracker.Objectives
 {
     public interface IUserObjectivesRepository
     {

@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
-namespace EffectiveTimeUsageTracker.Models.Objectives
+namespace ObjectiveTimeTracker.Objectives
 {
     public class UserObjectives
     {
@@ -10,10 +10,10 @@ namespace EffectiveTimeUsageTracker.Models.Objectives
         public BsonObjectId Id { get; set; }
 
         [BsonRequired]
-        [BsonElement("username")]
         public string Username { get; set; }
 
-        [BsonElement("objectives")]
+        public string UserId { get; set; }
+
         public IEnumerable<Objective> Objectives { get; set; }
     }
 }

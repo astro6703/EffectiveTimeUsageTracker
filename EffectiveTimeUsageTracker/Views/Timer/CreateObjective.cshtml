@@ -1,0 +1,22 @@
+﻿<div>
+    <h2>CreateObjective</h2>
+    <div asp-validation-summary="All"></div>
+    <form action="@Url.Action("CreateObjective", "Timer")" , method="post">
+        <div>
+            <label for="Name">Name:</label>
+            <input name="Name" type="text" />
+        </div>
+        <div>
+            <label for="WeeklyTimeGoal">WeeklyTimeGoal</label>
+            <input name="WeeklyTimeGoal" type="number" />
+        </div>
+        <div>
+            <label for="TotalWeeks">Total weeks:</label>
+            <input name="TotalWeeks" type="number" />
+        </div>
+        <div>
+            <label for="Submit">Submit:</label>
+            <input name="Submit" type="submit" />
+        </div>
+    </form>
+</div>
