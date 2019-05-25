@@ -1,11 +1,10 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using MongoDB.Bson;
 
-namespace EffectiveTimeUsageTracker.Models.Objectives
+namespace ObjectiveTimeTracker.Objectives
 {
     public class UserObjectivesRepository : IUserObjectivesRepository
     {

@@ -10,8 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using EffectiveTimeUsageTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using EffectiveTimeUsageTracker.Models.Objectives;
 using MongoDB.Driver;
+using ObjectiveTimeTracker.Stopwatches;
+using ObjectiveTimeTracker.Objectives;
 
 namespace EffectiveTimeUsageTracker
 {

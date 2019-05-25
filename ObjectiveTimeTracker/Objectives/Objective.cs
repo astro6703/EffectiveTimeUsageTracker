@@ -1,27 +1,15 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
-namespace EffectiveTimeUsageTracker.Models.Objectives
+namespace ObjectiveTimeTracker.Objectives
 {
     public class Objective
     {
-        [Required]
         public string Name { get; set; }
-
-        [Required]
         public int WeeklyTimeGoal { get; set; }
-
-        [Required]
         public int TotalWeeks { get; set; }
-
-        [Required]
         public DateTime StartDate { get; set; }
-
         public TimeSpan TimeSpent { get; set; }
-
         public TimeSpan TimeSpentToday { get; set; }
-
         public DateTime LastDate { get; set; }
 
         public TimeSpan ProjectedForToday

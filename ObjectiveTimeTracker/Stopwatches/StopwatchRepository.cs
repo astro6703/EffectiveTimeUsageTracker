@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EffectiveTimeUsageTracker.Models
+namespace ObjectiveTimeTracker.Stopwatches
 {
     public class StopwatchRepository
     {

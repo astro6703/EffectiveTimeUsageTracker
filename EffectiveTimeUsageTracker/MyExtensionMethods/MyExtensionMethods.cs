@@ -1,4 +1,4 @@
-﻿using EffectiveTimeUsageTracker.Models.Objectives;
+﻿using ObjectiveTimeTracker.Objectives;
 using System.Collections.Generic;
 
 namespace EffectiveTimeUsageTracker.MyExtensionMethods

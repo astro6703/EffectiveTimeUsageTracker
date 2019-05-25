@@ -1,9 +1,9 @@
 ﻿using EffectiveTimeUsageTracker.Models;
-using EffectiveTimeUsageTracker.Models.Objectives;
 using EffectiveTimeUsageTracker.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ObjectiveTimeTracker.Objectives;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

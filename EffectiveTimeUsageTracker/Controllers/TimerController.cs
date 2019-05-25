@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Linq;
-using EffectiveTimeUsageTracker.Models.Objectives;
 using EffectiveTimeUsageTracker.MyExtensionMethods;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EffectiveTimeUsageTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
+using ObjectiveTimeTracker.Objectives;
+using ObjectiveTimeTracker.Stopwatches;
+using EffectiveTimeUsageTracker.ViewModels;
 
 namespace EffectiveTimeUsageTracker.Controllers
 {
@@ -101,9 +103,9 @@ namespace EffectiveTimeUsageTracker.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateObjective(Objective objective)
+        public async Task<IActionResult> CreateObjective(ObjectiveCreateModel objectiveCreateModel)
         {
-            if (objective == null) throw new ArgumentNullException($"{nameof(objective)} instance was null");
+            if (objectiveCreateModel == null) throw new ArgumentNullException($"{nameof(objectiveCreateModel)} instance was null");
             
             if (ModelState.IsValid)
             {
@@ -111,12 +113,18 @@ namespace EffectiveTimeUsageTracker.Controllers
 
                 if (currentUserObjectives == null)
                     ModelState.AddModelError("", "Cannot find userObjectives for this user");
-                else if (currentUserObjectives.Objectives.Where(x => x.Name == objective.Name).Any())
+                else if (currentUserObjectives.Objectives.Where(x => x.Name == objectiveCreateModel.Name).Any())
                     ModelState.AddModelError("", "Objective with this name already exists");
                 else
                 {
-                    objective.StartDate = DateTime.Now.Date.ToUniversalTime();
-                    objective.LastDate = DateTime.Now.Date.ToUniversalTime();
+                    var objective = new Objective
+                    {
+                        Name = objectiveCreateModel.Name,
+                        TotalWeeks = objectiveCreateModel.TotalWeeks,
+                        WeeklyTimeGoal = objectiveCreateModel.WeeklyTimeGoal,
+                        StartDate = DateTime.Now.Date.ToUniversalTime(),
+                        LastDate = DateTime.Now.Date.ToUniversalTime()
+                    };
 
                     currentUserObjectives.Objectives = currentUserObjectives.Objectives.AddObjective(objective).ToArray();
 

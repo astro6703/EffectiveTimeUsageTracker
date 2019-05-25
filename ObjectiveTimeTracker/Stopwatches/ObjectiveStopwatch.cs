@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace EffectiveTimeUsageTracker.Models
+namespace ObjectiveTimeTracker.Stopwatches
 {
     public class ObjectiveStopwatch
     {
