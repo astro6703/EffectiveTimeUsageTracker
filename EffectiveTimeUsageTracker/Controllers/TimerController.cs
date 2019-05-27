@@ -49,6 +49,8 @@ namespace EffectiveTimeUsageTracker.Controllers
         [Authorize]
         public async Task<IActionResult> StartWatch(string name)
         {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             UserStopwatch.Stop();
 
             var objectives = await _userObjectivesRepository.GetUserObjectivesAsync(_userManager.GetUserId(User));
@@ -70,7 +72,7 @@ namespace EffectiveTimeUsageTracker.Controllers
             UserStopwatch.SetObjective(name);
             UserStopwatch.Start();
 
-            return RedirectToAction("Index", "Timer");
+            return NoContent();
         }
 
         [Authorize]
@@ -91,18 +93,19 @@ namespace EffectiveTimeUsageTracker.Controllers
             var currentObjective = objectives.Objectives.Where(x => x.Name == currentObjectiveName).FirstOrDefault();
 
             currentObjective.Spend(UserStopwatch.Elapsed);
+            UserStopwatch.ResetObjective();
             objectives.Objectives = objectives.Objectives.UpdateObjective(currentObjective).ToArray();
             await _userObjectivesRepository.UpdateUserObjectivesAsync(objectives);
 
-            return RedirectToAction("Index", "Timer");
+            return NoContent();
         }
 
         [Authorize]
         public IActionResult CreateObjective()
             => View();
 
-        [HttpPost]
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> CreateObjective(ObjectiveCreateModel objectiveCreateModel)
         {
             if (objectiveCreateModel == null) throw new ArgumentNullException($"{nameof(objectiveCreateModel)} instance was null");
