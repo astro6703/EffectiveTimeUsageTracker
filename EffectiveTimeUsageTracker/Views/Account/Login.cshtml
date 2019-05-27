@@ -1,21 +1,21 @@
 ﻿@model UserLoginModel;
 
-<div>
-    <h1>Enter email and password</h1>
-    <a href="@Url.Action("Create", "Account")">Sign up</a>
-    <div asp-validation-summary="All"></div>
-    <form action="@Url.Action("Login", "Account")" method="post">
-        <div>
-            <label for="Email">Email:</label>
-            <input name="Email" type="email" />
-        </div>
-        <div>
-            <label for="Password">Password:</label>
-            <input name="Password" type="password" />
-        </div>
-        <div>
-            <label for="Submit">Submit:</label>
-            <input name="Submit" type="submit" />
-        </div>
-    </form>
-</div>
+    <div class="container w-25">
+        <h1 class="text-center font-weight-normal">Enter email and password</h1>
+        <div asp-validation-summary="All"></div>
+        <form action="@Url.Action("Login", "Account")" method="post">
+            <div class="form-group">
+                <label for="Email">Email:</label>
+                <input class="form-control" name="Email" type="email" />
+            </div>
+            <div class="form-group">
+                <label for="Password">Password:</label>
+                <input class="form-control" name="Password" type="password" />
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" name="Submit" type="submit" />
+                <a class="btn btn-secondary" href="@Url.Action("Create", "Account")">Sign up</a>
+            </div>
+        </form>
+        
+    </div>

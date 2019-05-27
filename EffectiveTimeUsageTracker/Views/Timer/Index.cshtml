@@ -1,28 +1,43 @@
 ﻿@using ObjectiveTimeTracker.Objectives;
-@model  UserObjectives
+@model UserObjectives
 
-<div>
-    @($"Welcome, {User.Identity.Name}, you're authorized now!")
+<div class="container w-50">
     <div>
-        <a href="@Url.Action("SignOut", "Account")">SignOut</a>
+        @($"Welcome, {User.Identity.Name}, you're authorized now!")
+        <a class="btn btn-primary" href="@Url.Action("SignOut", "Account")">SignOut</a>
     </div>
     <div>
         <div>
-            <h2>Your objectives</h2>
+            <h2 class="text-center font-weight-normal py-sm-3">Your objectives</h2>
             @if (Model.Objectives.Count() != 0)
             {
-                foreach (var objective in Model.Objectives)
+                var objectivesArray = Model.Objectives.ToArray();
+                for (var i = 0; i < Model.Objectives.Count(); i++)
                 {
-                <div>Name: @objective.Name</div>
-                <div>Projected for today: @objective.ProjectedForToday</div>
-                <div>Time spent today: @objective.TimeSpentToday</div>
-                <div><a href="@Url.Action("StartWatch", "Timer", new { objective.Name })">Start timer</a></div>
-                <div><a href="@Url.Action("StopWatch", "Timer", new { objective.Name })">Stop timer:</a></div>
-                <div><a href="@Url.Action("RemoveObjective", "Timer", new { objective.Name })">Remove objective</a></div>
+                    var objective = objectivesArray[i];
+                    <div class="border-bottom p-2 ">
+                        <div class="row">
+                            <div class="col">
+                                <div class="font-weight-normal m-1" id="name-@i">@objective.Name</div>
+                                <div class="font-weight-normal m-1">Projected for today: @objective.ProjectedForToday.ToString(@"hh\:mm\:ss")</div>
+                            </div>
+                            <div class="col"><span class="text-monospace display-4 float-md-right" id="time-spent-@i">@objective.TimeSpentToday.ToString(@"hh\:mm\:ss")</span></div>
+                        </div>
+                        
+                        <a class="btn btn-primary m-1" id="start-timer-@i" onclick="start()" href="@Url.Action("StartWatch", "Timer", new { objective.Name })">Start timer</a>
+                        <a class="btn btn-primary m-1" id="stop-timer-@i" href="@Url.Action("StopWatch", "Timer", new { objective.Name })">Stop timer</a>
+                        <a class="btn btn-danger m-1" href="@Url.Action("RemoveObjective", "Timer", new { objective.Name })">Remove objective</a>
+                        
+                    </div>
                 }
             }
-            else { <div>You have no objections</div> } 
+            else
+            { <div>You have no objectives</div>}
         </div>
-        <a href="@Url.Action("CreateObjective", "Timer")">Create objective</a>
+        <div class="p-2">
+            <a class="btn btn-success m-1" href="@Url.Action("CreateObjective", "Timer")">Create objective</a>
+        </div>
     </div>
 </div>
+
+<script src="~/js/Timer.js" type="text/javascript"></script>
