@@ -52,10 +52,3 @@ function getCurrentTime(currentTimerNumber) {
 
     return timeSplit;
 }
-
-function postRequest(url, data) {
-    return fetch(url, {
-        method: "POST",
-        body: data
-    });
-}
