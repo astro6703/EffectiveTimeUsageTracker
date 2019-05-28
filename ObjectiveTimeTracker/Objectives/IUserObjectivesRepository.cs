@@ -8,6 +8,6 @@ namespace ObjectiveTimeTracker.Objectives
 
         Task UpdateUserObjectivesAsync(UserObjectives newObjectives);
 
-        Task<UserObjectives> GetUserObjectivesAsync(string username);
+        Task<UserObjectives> GetUserObjectivesAsync(string userId);
     }
 }

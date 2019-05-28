@@ -17,7 +17,7 @@ namespace EffectiveTimeUsageTracker.Controllers
     {
         private readonly IUserObjectivesRepository _userObjectivesRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly StopwatchRepository _stopwatchRepository;
+        private readonly IStopwatchRepository _stopwatchRepository;
 
         private string UserID;
         private ObjectiveStopwatch UserStopwatch;
@@ -25,7 +25,7 @@ namespace EffectiveTimeUsageTracker.Controllers
         public TimerController(
             IUserObjectivesRepository repository, 
             UserManager<ApplicationUser> userManager,
-            StopwatchRepository stopwatchRepository)
+            IStopwatchRepository stopwatchRepository)
         {
             _userObjectivesRepository = repository ?? throw new ArgumentNullException($"{nameof(repository)} was null");
             _userManager = userManager ?? throw new ArgumentNullException($"{nameof(userManager)}");
@@ -132,10 +132,12 @@ namespace EffectiveTimeUsageTracker.Controllers
                     currentUserObjectives.Objectives = currentUserObjectives.Objectives.AddObjective(objective).ToArray();
 
                     await _userObjectivesRepository.UpdateUserObjectivesAsync(currentUserObjectives);
+
+                    return RedirectToAction("Index", "Timer");
                 }
             }
 
-            return RedirectToAction("Index", "Timer");
+            return View(objectiveCreateModel);
         }
 
         public async Task<IActionResult> RemoveObjective(string name)

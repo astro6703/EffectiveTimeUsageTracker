@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ObjectiveTimeTracker.Stopwatches
 {
-    public class StopwatchRepository
+    public class StopwatchRepository : IStopwatchRepository
     {
         private IDictionary<string, ObjectiveStopwatch> _stopwatchesMap;
 

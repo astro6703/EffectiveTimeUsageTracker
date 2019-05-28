@@ -11,15 +11,9 @@ namespace ObjectiveTimeTracker.Stopwatches
 
         public TimeSpan Elapsed => _stopwatch.Elapsed;
 
-        public void Start()
-        {
-            _stopwatch.Start();
-        }
+        public void Start() => _stopwatch.Start();
 
-        public void Stop()
-        {
-            _stopwatch.Stop();
-        }
+        public void Stop() => _stopwatch.Stop();
 
         public void SetObjective(string objectiveName)
         {
@@ -28,9 +22,6 @@ namespace ObjectiveTimeTracker.Stopwatches
             _stopwatch.Reset();
         }
 
-        public void ResetObjective()
-        {
-            ObjectiveName = null;
-        }
+        public void ResetObjective() => ObjectiveName = null;
     }
 }

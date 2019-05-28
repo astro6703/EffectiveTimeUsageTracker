@@ -2,8 +2,8 @@
 @model UserObjectives
 
 <div class="container w-50">
-    <div>
-        @($"Welcome, {User.Identity.Name}, you're authorized now!")
+    <div class="float-right">
+        @($"You're authorized as {User.Identity.Name}")
         <a class="btn btn-primary" href="@Url.Action("SignOut", "Account")">SignOut</a>
     </div>
     <div>
@@ -32,7 +32,7 @@
                 }
             }
             else
-            { <div>You have no objectives</div>}
+            { <div class="text-center font-weight-normal" ><h3>You have no objectives</h3></div>}
         </div>
         <div class="p-2">
             <a class="btn btn-success m-1" href="@Url.Action("CreateObjective", "Timer")">Create objective</a>

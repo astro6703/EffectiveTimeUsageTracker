@@ -12,11 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Objectives/"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Stopwatches/"/>
+    <Folder Include="Objectives/" />
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,7 @@ namespace EffectiveTimeUsageTracker
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<StopwatchRepository>();
+            services.AddSingleton<IStopwatchRepository, StopwatchRepository>();
             services.AddSingleton<IMongoClient>(serveceProvider => new MongoClient(Configuration.GetConnectionString("MongoDB")));
             services.AddTransient<IUserObjectivesRepository, UserObjectivesRepository>();
             services.AddDbContext<UsersIdentityDbContext>(options 

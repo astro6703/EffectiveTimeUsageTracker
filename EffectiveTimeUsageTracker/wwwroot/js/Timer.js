@@ -6,13 +6,13 @@ function start() {
     if (event.target.id !== currentTimerNumber) {
         if (typeof currentTimerNumber !== "undefined") {
             let oldStopButton = document.getElementById("stop-timer-" + currentTimerNumber);
+            let oldTimerName = document.getElementById("name-" + currentTimerNumber).innerHTML;
             oldStopButton.click();
             oldStopButton.removeEventListener("click", stop);
         }
 
         isRunning = false;
         clearInterval(clocktimer);
-
         let eventId = event.target.id.toString();
         currentTimerNumber = eventId[eventId.length - 1];
         document.getElementById("stop-timer-" + currentTimerNumber).addEventListener("click", stop);
@@ -51,4 +51,11 @@ function getCurrentTime(currentTimerNumber) {
     let timeSplit = time.split(":");
 
     return timeSplit;
+}
+
+function postRequest(url, data) {
+    return fetch(url, {
+        method: "POST",
+        body: data
+    });
 }
