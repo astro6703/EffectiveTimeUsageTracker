@@ -24,8 +24,7 @@
                             <div class="col"><span class="text-monospace display-4 float-md-right" id="time-spent-@i">@objective.TimeSpentToday.ToString(@"hh\:mm\:ss")</span></div>
                         </div>
                         
-                        <a class="btn btn-primary m-1" id="start-timer-@i" onclick="start()" href="@Url.Action("StartWatch", "Timer", new { objective.Name })">Start timer</a>
-                        <a class="btn btn-primary m-1" id="stop-timer-@i" href="@Url.Action("StopWatch", "Timer", new { objective.Name })">Stop timer</a>
+                        <a class="btn btn-primary m-1" id="start-stop-timer-@i" onclick="startStop()">Start</a>
                         <a class="btn btn-danger m-1" href="@Url.Action("RemoveObjective", "Timer", new { objective.Name })">Remove objective</a>
                         
                     </div>
